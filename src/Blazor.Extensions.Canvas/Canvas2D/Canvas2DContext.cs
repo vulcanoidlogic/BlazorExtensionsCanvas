@@ -1,6 +1,7 @@
 using Blazor.Extensions.Canvas.Model;
 using Microsoft.AspNetCore.Components;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Blazor.Extensions.Canvas.Canvas2D
@@ -207,6 +208,16 @@ namespace Blazor.Extensions.Canvas.Canvas2D
         {
             this.GlobalCompositeOperation = value;
             await this.BatchCallAsync(GLOBAL_COMPOSITE_OPERATION_PROPERTY, isMethodCall: false, value);
+        }
+
+        // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setTransform
+        public async Task DrawImageAsync(string path2D, float horizontalScaling, float verticalSkewing, float horizontalSkewing, float verticalScaling, float horizontalTranslation, float verticalTranslation)
+        {
+            var args = new List<object>() { path2D, horizontalScaling, verticalSkewing, horizontalSkewing, verticalScaling, horizontalTranslation, verticalTranslation };
+
+            Console.WriteLine($"DrawImageAsync {path2D}");
+            await this.ExecuteMethodAsync<bool>("drawImagePath2D", args.ToArray());
+            await Task.CompletedTask;
         }
 
         #endregion Property Setters

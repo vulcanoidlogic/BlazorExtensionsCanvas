@@ -1,5 +1,6 @@
 using Blazor.Extensions.Canvas.Canvas2D;
 using Microsoft.AspNetCore.Components;
+using System;
 using System.Threading.Tasks;
 
 namespace Blazor.Extensions.Canvas.Test.ServerSide.Pages
@@ -18,7 +19,13 @@ namespace Blazor.Extensions.Canvas.Test.ServerSide.Pages
             await this._context.FillRectAsync(10, 100, 100, 100);
 
             await this._context.SetFontAsync("48px serif");
-            await this._context.StrokeTextAsync("Hello Blazor!!!", 10, 100);
+            await this._context.StrokeTextAsync("Hello Blazor Extensions Canvas!!!", 0, 60);
+
+            var deleteIconPath = MaterialIcons.DeleteSVGPath;
+            await this._context.DrawImageAsync(deleteIconPath, 1f / 24, 0, 0, 1f / 24, 10, 10);
+
+            Console.WriteLine($"deleteIconPath={deleteIconPath}");
+
         }
     }
 }

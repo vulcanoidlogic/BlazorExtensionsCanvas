@@ -110,7 +110,14 @@ namespace Blazor.Extensions
 
         protected async Task<T> CallMethodAsync<T>(string method, params object[] value)
         {
+            Console.WriteLine($"CallMethodAsync method={method}, this._contextName={this._contextName}, CALL_METHOD_ACTION={CALL_METHOD_ACTION}, value={value[0]}");
             return await this._jsRuntime.InvokeAsync<T>($"{NAMESPACE_PREFIX}.{this._contextName}.{CALL_METHOD_ACTION}", this.Canvas, method, value);
+        }
+
+        protected async Task<T> ExecuteMethodAsync<T>(string method, params object[] value)
+        {
+            Console.WriteLine($"CallMethodAsync method={method}, this._contextName={this._contextName}, CALL_METHOD_ACTION={CALL_METHOD_ACTION}, value={value[0]}");
+            return await this._jsRuntime.InvokeAsync<T>($"{NAMESPACE_PREFIX}.{this._contextName}.{method}", this.Canvas, value);
         }
 
         private async Task BatchCallInnerAsync()
