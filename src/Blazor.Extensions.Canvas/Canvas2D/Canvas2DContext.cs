@@ -38,6 +38,7 @@ namespace Blazor.Extensions.Canvas.Canvas2D
         private const string ARC_METHOD = "arc";
         private const string ARC_TO_METHOD = "arcTo";
         private const string RECT_METHOD = "rect";
+        private const string ROUND_RECT_METHOD = "roundRect";
         private const string FILL_METHOD = "fill";
         private const string STROKE_METHOD = "stroke";
         private const string DRAW_FOCUS_IF_NEEDED_METHOD = "drawFocusIfNeeded";
@@ -281,6 +282,8 @@ namespace Blazor.Extensions.Canvas.Canvas2D
         public void Rect(double x, double y, double width, double height) => this.CallMethod<object>(RECT_METHOD, x, y, width, height);
         public async Task RectAsync(double x, double y, double width, double height) => await this.BatchCallAsync(RECT_METHOD, isMethodCall: true, x, y, width, height);
 
+        public async Task RoundRectAsync(double x, double y, double width, double height, double radii) => await this.BatchCallAsync(ROUND_RECT_METHOD, isMethodCall: true, x, y, width, height, radii);
+
         [Obsolete("Use the async version instead, which is already called internally.")]
         public void Fill() => this.CallMethod<object>(FILL_METHOD);
         public async Task FillAsync() => await this.BatchCallAsync(FILL_METHOD, isMethodCall: true);
@@ -352,6 +355,14 @@ namespace Blazor.Extensions.Canvas.Canvas2D
             var args = new List<object>() { path, horizontalScaling, verticalSkewing, horizontalSkewing, verticalScaling, horizontalTranslation, verticalTranslation };
 
             await this.ExecuteMethodAsync<bool>("drawImagePath2D", args.ToArray());
+            await Task.CompletedTask;
+        }
+
+        public async Task DrawImageBase64Async(string path, int dx, int dy, int dWidth, int dHeight)
+        {
+            var args = new List<object>() { path, dx, dy, dWidth, dHeight };
+
+            await this.ExecuteMethodAsync<bool>("drawImageBase64", args.ToArray());
             await Task.CompletedTask;
         }
 

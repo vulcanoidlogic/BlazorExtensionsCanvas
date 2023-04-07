@@ -4,5 +4,8 @@ set NugetPersonalAccessToken=<OUR_API_KEY>
 dotnet pack
 nuget.exe restore
 
-nuget.exe push -Source "BlazorExtensionsCanvas" -ApiKey vciqzkoknrkcrinrkwxxbr62aal5zhad3kzaextnvc7mq7bncsda src\Blazor.Extensions.Canvas\bin\Debug\Blazor.Extensions.Canvas.1.1.2.nupkg
+nuget.exe push -Source "BlazorExtensionsCanvas" -ApiKey OUR_API_KEY src\Blazor.Extensions.Canvas\bin\Debug\Blazor.Extensions.Canvas.1.1.2.nupkg
 
+#https://dev.to/iamrule/a-guide-on-how-to-test-new-versions-of-your-nuget-packages-locally-1phk
+
+copy src\Blazor.Extensions.Canvas\bin\Debug\Blazor.Extensions.Canvas.1.1.5.nupkg D:\Users\gtful\local.nuget

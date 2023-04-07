@@ -98,7 +98,31 @@ export class ContextManager {
       parameters[5],
       parameters[6]
     );
+
     context.fill(path2D);
+    return true;
+  };
+
+  public drawImageBase64 = (
+    canvas: HTMLCanvasElement,
+    parameters: [string, number, number, number, number]
+  ) => {
+    if (!canvas) throw new Error("Invalid canvas in drawImageBase64.");
+    const context = this.contexts.get(canvas.id);
+    if (!context) throw new Error("Invalid context in drawImageBase64.");
+
+    const base64img = parameters[0];
+    var img = new Image();
+    img.onload = function () {
+      context.drawImage(
+        img,
+        parameters[1],
+        parameters[2],
+        parameters[3],
+        parameters[4]
+      );
+    };
+    img.src = base64img;
     return true;
   };
 
