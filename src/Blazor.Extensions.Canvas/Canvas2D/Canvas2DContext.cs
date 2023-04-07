@@ -210,20 +210,9 @@ namespace Blazor.Extensions.Canvas.Canvas2D
             await this.BatchCallAsync(GLOBAL_COMPOSITE_OPERATION_PROPERTY, isMethodCall: false, value);
         }
 
-        // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setTransform
-        public async Task DrawImageAsync(string path2D, float horizontalScaling, float verticalSkewing, float horizontalSkewing, float verticalScaling, float horizontalTranslation, float verticalTranslation)
-        {
-            var args = new List<object>() { path2D, horizontalScaling, verticalSkewing, horizontalSkewing, verticalScaling, horizontalTranslation, verticalTranslation };
-
-            Console.WriteLine($"DrawImageAsync {path2D}");
-            await this.ExecuteMethodAsync<bool>("drawImagePath2D", args.ToArray());
-            await Task.CompletedTask;
-        }
-
         #endregion Property Setters
 
         #region Methods
-
         [Obsolete("Use the async version instead, which is already called internally.")]
         public void FillRect(double x, double y, double width, double height) => this.CallMethod<object>(FILL_RECT_METHOD, x, y, width, height);
         public async Task FillRectAsync(double x, double y, double width, double height) => await this.BatchCallAsync(FILL_RECT_METHOD, isMethodCall: true, x, y, width, height);
@@ -351,6 +340,21 @@ namespace Blazor.Extensions.Canvas.Canvas2D
         public async Task DrawImageAsync(ElementReference elementReference, double dx, double dy) => await this.BatchCallAsync(DRAW_IMAGE_METHOD, isMethodCall: true, elementReference, dx, dy);
         public async Task DrawImageAsync(ElementReference elementReference, double dx, double dy, double dWidth, double dHeight) => await this.BatchCallAsync(DRAW_IMAGE_METHOD, isMethodCall: true, elementReference, dx, dy, dWidth, dHeight);
         public async Task DrawImageAsync(ElementReference elementReference, double sx, double sy, double sWidth, double sHeight, double dx, double dy, double dWidth, double dHeight) => await this.BatchCallAsync(DRAW_IMAGE_METHOD, isMethodCall: true, elementReference, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+
+        // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setTransform
+        public async Task DrawImagePathAsync(string path)
+        {
+            await this.ExecuteMethodAsync<bool>("drawImageDefaultPath2D", path);
+            await Task.CompletedTask;
+        }
+        public async Task DrawImagePathAsync(string path, double horizontalScaling, double verticalSkewing, double horizontalSkewing, double verticalScaling, double horizontalTranslation, double verticalTranslation)
+        {
+            var args = new List<object>() { path, horizontalScaling, verticalSkewing, horizontalSkewing, verticalScaling, horizontalTranslation, verticalTranslation };
+
+            await this.ExecuteMethodAsync<bool>("drawImagePath2D", args.ToArray());
+            await Task.CompletedTask;
+        }
+
 
         public async Task<object> CreatePatternAsync(ElementReference image, RepeatPattern repeat) => await this.CallMethodAsync<object>(CREATE_PATTERN_METHOD, image, this._repeatNames[(int)repeat]);
 

@@ -86,7 +86,6 @@ export class ContextManager {
     parameters: [string, number, number, number, number, number, number]
   ) => {
     if (!canvas) throw new Error("Invalid canvas in drawImagePath2D.");
-    // const context = this.getContext(canvas);
     const context = this.contexts.get(canvas.id);
     if (!context) throw new Error("Invalid context in drawImagePath2D.");
 
@@ -100,6 +99,17 @@ export class ContextManager {
       parameters[6]
     );
     context.fill(path2D);
+    return true;
+  };
+
+  public drawImageDefaultPath2D = (canvas: HTMLCanvasElement, path: string) => {
+    if (!canvas) throw new Error("Invalid canvas in drawImagePath2D.");
+    const context = this.contexts.get(canvas.id);
+    if (!context) throw new Error("Invalid context in drawImagePath2D.");
+
+    const path2D = new Path2D(path);
+    context.fill(path2D);
+    return true;
   };
 
   private callWithContext = (context: any, method: string, args: any) => {

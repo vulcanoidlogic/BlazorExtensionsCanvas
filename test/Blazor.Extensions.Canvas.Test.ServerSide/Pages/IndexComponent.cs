@@ -21,10 +21,11 @@ namespace Blazor.Extensions.Canvas.Test.ServerSide.Pages
             await this._context.SetFontAsync("48px serif");
             await this._context.StrokeTextAsync("Hello Blazor Extensions Canvas!!!", 0, 60);
 
-            var deleteIconPath = MaterialIcons.DeleteSVGPath;
-            await this._context.DrawImageAsync(deleteIconPath, 1f / 24, 0, 0, 1f / 24, 10, 10);
+            await this._context.SetFillStyleAsync("orange");
+            await this._context.DrawImagePathAsync(MaterialIcons.DeleteSVGPath, 1f / 24, 0, 0, 1f / 24, 120, 100);
 
-            Console.WriteLine($"deleteIconPath={deleteIconPath}");
+            await this._context.SetTransformAsync(1f / 24, 0, 0, 1f / 24, 140, 160);
+            await this._context.DrawImagePathAsync(MaterialIcons.ArrowDownwardSVGPath);
 
         }
     }
