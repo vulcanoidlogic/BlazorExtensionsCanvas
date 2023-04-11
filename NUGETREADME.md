@@ -8,4 +8,4 @@ nuget.exe push -Source "BlazorExtensionsCanvas" -ApiKey OUR_API_KEY src\Blazor.E
 
 #https://dev.to/iamrule/a-guide-on-how-to-test-new-versions-of-your-nuget-packages-locally-1phk
 
-copy src\Blazor.Extensions.Canvas\bin\Debug\Blazor.Extensions.Canvas.1.1.5.nupkg D:\Users\gtful\local.nuget
+copy src\Blazor.Extensions.Canvas\bin\Debug\Blazor.Extensions.Canvas.1.1.6.nupkg D:\Users\gtful\local.nuget

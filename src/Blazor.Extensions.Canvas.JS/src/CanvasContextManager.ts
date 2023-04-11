@@ -103,6 +103,16 @@ export class ContextManager {
     return true;
   };
 
+  public drawImageDefaultPath2D = (canvas: HTMLCanvasElement, path: string) => {
+    if (!canvas) throw new Error("Invalid canvas in drawImagePath2D.");
+    const context = this.contexts.get(canvas.id);
+    if (!context) throw new Error("Invalid context in drawImagePath2D.");
+
+    const path2D = new Path2D(path);
+    context.fill(path2D);
+    return true;
+  };
+
   public drawImageBase64 = (
     canvas: HTMLCanvasElement,
     parameters: [string, number, number, number, number]
@@ -126,13 +136,31 @@ export class ContextManager {
     return true;
   };
 
-  public drawImageDefaultPath2D = (canvas: HTMLCanvasElement, path: string) => {
-    if (!canvas) throw new Error("Invalid canvas in drawImagePath2D.");
-    const context = this.contexts.get(canvas.id);
-    if (!context) throw new Error("Invalid context in drawImagePath2D.");
+  public customRoundedRect = (
+    canvas: HTMLCanvasElement,
+    parameters: [number, number, number, number, number]
+  ) => {
+    if (!canvas) throw new Error("Invalid canvas in drawImageBase64.");
+    const ctx = this.contexts.get(canvas.id);
+    if (!ctx) throw new Error("Invalid context in drawImageBase64.");
 
-    const path2D = new Path2D(path);
-    context.fill(path2D);
+    const x = parameters[0];
+    const y = parameters[1];
+    const width = parameters[2];
+    const height = parameters[3];
+    const radius = parameters[4];
+    // (ctx, x, y, width, height, radius)
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    ctx.lineTo(x + radius, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
     return true;
   };
 

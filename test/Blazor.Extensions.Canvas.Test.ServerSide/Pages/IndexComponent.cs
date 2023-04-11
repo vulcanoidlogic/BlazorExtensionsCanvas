@@ -23,6 +23,10 @@ namespace Blazor.Extensions.Canvas.Test.ServerSide.Pages
             await this._context.RoundRectAsync(280, 100, 100, 100, 10);
             await this._context.FillAsync();
 
+            await this._context.SetFillStyleAsync("blue");
+            await this._context.CustomRoundedRectAsync(400, 100, 100, 100, 10);
+            await this._context.FillAsync();
+
             await this._context.SetFillStyleAsync("green");
 
             await this._context.SetFontAsync("48px serif");

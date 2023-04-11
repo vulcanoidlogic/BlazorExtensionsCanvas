@@ -367,6 +367,15 @@ namespace Blazor.Extensions.Canvas.Canvas2D
         }
 
 
+        public async Task CustomRoundedRectAsync(int x, int y, int width, int height, int radius)
+        {
+            var args = new List<object>() { x, y, width, height, radius };
+
+            await this.ExecuteMethodAsync<bool>("customRoundedRect", args.ToArray());
+            await Task.CompletedTask;
+        }
+
+
         public async Task<object> CreatePatternAsync(ElementReference image, RepeatPattern repeat) => await this.CallMethodAsync<object>(CREATE_PATTERN_METHOD, image, this._repeatNames[(int)repeat]);
 
         #endregion Methods
