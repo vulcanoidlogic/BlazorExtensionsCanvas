@@ -117,7 +117,8 @@ export class ContextManager {
     canvas: HTMLCanvasElement,
     parameters: [string, number, number, number, number]
   ) => {
-    if (!canvas) throw new Error("Invalid canvas in drawImageBase64.");
+    // if (!canvas) throw new Error("Invalid canvas in drawImageBase64.");
+    if (!canvas) return;
     const context = this.contexts.get(canvas.id);
     if (!context) throw new Error("Invalid context in drawImageBase64.");
 
