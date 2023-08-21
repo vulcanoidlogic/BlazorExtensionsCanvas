@@ -11,6 +11,7 @@
     "lodash": "^4.17.20"
   },
   "devDependencies": {
+    "@types/blazor__javascript-interop": "^3.1.3",
     "ts-loader": "^4.4.2",
     "typescript": "^2.9.2",
     "webpack": "^4.16.3",

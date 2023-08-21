@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export class ContextManager {
   private readonly contexts = new Map<string, any>();
+  private readonly imageCache = new Map<string, HTMLImageElement>();
   private readonly webGLObject = new Array<any>();
   private readonly contextName: string;
   private webGLContext = false;
@@ -28,6 +29,11 @@ export class ContextManager {
       this.webGLContext = true;
     } else throw new Error(`Invalid context name: ${contextName}`);
   }
+
+  private reportImageLoaded = (guid: string) => {
+    console.log("in callImageLoaded guid=", guid);
+    DotNet.invokeMethodAsync("Blazor.Extensions.Canvas", "ImageLoaded", guid);
+  };
 
   public add = (canvas: HTMLCanvasElement, parameters: any) => {
     if (!canvas) throw new Error("Invalid canvas.");
@@ -113,27 +119,45 @@ export class ContextManager {
     return true;
   };
 
+  public loadImageBase64 = (
+    _: HTMLCanvasElement,
+    [guid, path]: [string, string]
+  ) => {
+    const found = this.imageCache.get(guid);
+    if (found) {
+      this.reportImageLoaded(guid);
+      return true;
+    }
+
+    const img = new Image();
+    img.id = guid;
+    const self = this;
+    this.imageCache.set(guid, img);
+    img.onload = function () {
+      console.log("initial image loaded");
+      self.reportImageLoaded(guid);
+    };
+    img.src = path;
+    return true;
+  };
+
   public drawImageBase64 = (
     canvas: HTMLCanvasElement,
-    parameters: [string, number, number, number, number]
+    [guid, x, y, w, h]: [string, number, number, number, number]
   ) => {
-    // if (!canvas) throw new Error("Invalid canvas in drawImageBase64.");
+    console.log("drawImageBase64 guid=", guid, x, y, w, h);
     if (!canvas) return;
     const context = this.contexts.get(canvas.id);
+    // const context = canvas.getContext("2d");
     if (!context) throw new Error("Invalid context in drawImageBase64.");
 
-    const base64img = parameters[0];
-    var img = new Image();
-    img.onload = function () {
-      context.drawImage(
-        img,
-        parameters[1],
-        parameters[2],
-        parameters[3],
-        parameters[4]
-      );
-    };
-    img.src = base64img;
+    const img = this.imageCache.get(guid);
+    if (img !== undefined) console.log("drawImageBase64 img=", img.id);
+    if (Boolean(img)) {
+      context.drawImage(img, x, y, w, h);
+    } else {
+      console.log("drawImageBase64 No image found for guid=", guid);
+    }
     return true;
   };
 
@@ -141,9 +165,9 @@ export class ContextManager {
     canvas: HTMLCanvasElement,
     parameters: [number, number, number, number, number]
   ) => {
-    if (!canvas) throw new Error("Invalid canvas in drawImageBase64.");
+    if (!canvas) throw new Error("Invalid canvas in customRoundedRect.");
     const ctx = this.contexts.get(canvas.id);
-    if (!ctx) throw new Error("Invalid context in drawImageBase64.");
+    if (!ctx) throw new Error("Invalid context in customRoundedRect.");
 
     const x = parameters[0];
     const y = parameters[1];

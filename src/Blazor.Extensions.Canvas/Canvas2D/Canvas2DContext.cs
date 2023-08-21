@@ -1,5 +1,6 @@
 using Blazor.Extensions.Canvas.Model;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -66,6 +67,8 @@ namespace Blazor.Extensions.Canvas.Canvas2D
         #endregion
 
         #region Properties
+
+        public static Dictionary<string, Action<string>> ImageLoadedActions { get; set; } = new();
 
         public object FillStyle { get; private set; } = "#000";
 
@@ -348,31 +351,45 @@ namespace Blazor.Extensions.Canvas.Canvas2D
         public async Task DrawImagePathAsync(string path)
         {
             await this.ExecuteMethodAsync<bool>("drawImageDefaultPath2D", path);
-            await Task.CompletedTask;
         }
         public async Task DrawImagePathAsync(string path, double horizontalScaling, double verticalSkewing, double horizontalSkewing, double verticalScaling, double horizontalTranslation, double verticalTranslation)
         {
             var args = new List<object>() { path, horizontalScaling, verticalSkewing, horizontalSkewing, verticalScaling, horizontalTranslation, verticalTranslation };
 
             await this.ExecuteMethodAsync<bool>("drawImagePath2D", args.ToArray());
-            await Task.CompletedTask;
         }
 
-        public async Task DrawImageBase64Async(string path, int dx, int dy, int dWidth, int dHeight)
+        public async Task LoadImageBase64Async(string guid, string path, Action<string> callback)
         {
-            var args = new List<object>() { path, dx, dy, dWidth, dHeight };
+            var args = new List<object>() { guid, path };
+            if (!ImageLoadedActions.ContainsKey(guid))
+                ImageLoadedActions.Add(guid, callback);
+
+            if (path != null)
+                await this.ExecuteMethodAsync<bool>("loadImageBase64", args.ToArray());
+        }
+
+        [JSInvokable]
+        public static void ImageLoaded(string guid)
+        {
+            if (ImageLoadedActions.ContainsKey(guid))
+                ImageLoadedActions[guid].Invoke(guid);
+        }
+
+        public async Task DrawImageBase64Async(string guid, int dx, int dy, int dWidth, int dHeight)
+        {
+            Console.WriteLine($"In DrawImageBase64Async guid={guid}");
+            var args = new List<object>() { guid, dx, dy, dWidth, dHeight };
 
             await this.ExecuteMethodAsync<bool>("drawImageBase64", args.ToArray());
             await Task.CompletedTask;
         }
-
 
         public async Task CustomRoundedRectAsync(int x, int y, int width, int height, int radius)
         {
             var args = new List<object>() { x, y, width, height, radius };
 
             await this.ExecuteMethodAsync<bool>("customRoundedRect", args.ToArray());
-            await Task.CompletedTask;
         }
 
 

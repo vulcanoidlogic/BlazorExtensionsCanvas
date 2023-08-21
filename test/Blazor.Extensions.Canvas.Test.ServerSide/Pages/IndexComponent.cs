@@ -39,7 +39,7 @@ namespace Blazor.Extensions.Canvas.Test.ServerSide.Pages
             await this._context.DrawImagePathAsync(MaterialIcons.ArrowDownwardSVGPath);
 
             await this._context.SetTransformAsync(1, 0, 0, 1, 0, 0);
-            await this._context.DrawImageBase64Async(MaterialIcons.DeleteLarge, 200, 100, 48, 48);
+            // await this._context.DrawImageBase64Async(MaterialIcons.DeleteLarge, 200, 100, 48, 48);
 
         }
     }
