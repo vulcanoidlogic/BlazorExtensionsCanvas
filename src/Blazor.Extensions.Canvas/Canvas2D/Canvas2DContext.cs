@@ -382,7 +382,7 @@ namespace Blazor.Extensions.Canvas.Canvas2D
             var args = new List<object>() { guid, dx, dy, dWidth, dHeight };
 
             await this.ExecuteMethodAsync<bool>("drawImageBase64", args.ToArray());
-            await Task.CompletedTask;
+
         }
 
         public async Task CustomRoundedRectAsync(int x, int y, int width, int height, int radius)

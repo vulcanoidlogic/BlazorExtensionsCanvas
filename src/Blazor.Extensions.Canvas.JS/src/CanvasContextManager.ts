@@ -141,6 +141,8 @@ export class ContextManager {
     return true;
   };
 
+  private isDrawn = false;
+
   public drawImageBase64 = (
     canvas: HTMLCanvasElement,
     [guid, x, y, w, h]: [string, number, number, number, number]
@@ -154,7 +156,8 @@ export class ContextManager {
     const img = this.imageCache.get(guid);
     if (img !== undefined) console.log("drawImageBase64 img=", img.id);
     if (Boolean(img)) {
-      context.drawImage(img, x, y, w, h);
+      if (!this.isDrawn) context.drawImage(img, x, y, w, h);
+      this.isDrawn = true;
     } else {
       console.log("drawImageBase64 No image found for guid=", guid);
     }
